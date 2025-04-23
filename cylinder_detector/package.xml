@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>cylinder_detector</name>
+  <version>0.0.0</version>
+  <description>敵の検知を目的としてpointcloudから円柱のローカル座標を返すノード</description>
+  <maintainer email="kaoru.yoshida@keio.jp">kaoru</maintainer>
+  <license>Apache-2.0</license>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+  <test_depend>ament_lint_cmake</test_depend> <!-- Added new test dependency -->
+  <test_depend>ament_lint_common</test_depend>
+  <test_depend>ament_lint_python</test_depend>
+  <test_depend>ament_lint_xmllint</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
