@@ -1,1 +1,4 @@
 # cylinder_detector
+
+visionary_ros2から返ってくるpointcloudをもとに円柱のローカル座標と半径を返すノード
+https://github.com/KeioRoboticsAssociation/visionary_ros2
