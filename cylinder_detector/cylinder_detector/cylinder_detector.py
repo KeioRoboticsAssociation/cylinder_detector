@@ -22,8 +22,8 @@ class CylinderDetector(Node):
         self.get_logger().info('CylinderDetector node started.')
         
         # パラメータ
-        self.declare_parameter('ransac_iterations', 20) # RANSACの試行回数
-        self.declare_parameter('ransac_threshold', 2.0) # RANSACの誤差許容範囲
+        self.declare_parameter('ransac_iterations', 100000) # RANSACの試行回数
+        self.declare_parameter('ransac_threshold', 1000.0) # RANSACの誤差許容範囲
         self.declare_parameter('window_width', 50.0) # スライディングウィンドウの幅
         self.declare_parameter('window_step', 5.0) # スライディングウィンドウをどれだけずらすか
         self.declare_parameter('x_min', -100.0) # ウィンドウをスライドさせる範囲のx座標の最小値
@@ -92,12 +92,16 @@ class CylinderDetector(Node):
             success, computedDiameter, circle_center = self.compute_circle_from_three_points(p1, p2, p3)
             if not success:
                 continue
+            elif abs(computedDiameter - 800) > 200:
+                continue
+                
             # 他の点が円内に入るか判定
             inliers = 0
             for center in centers:
                 distance = math.sqrt((center[0] - circle_center[0]) ** 2 + (center[1] - circle_center[1]) ** 2)
                 if abs(distance - computedDiameter / 2) < ransac_threshold:
                     inliers += 1
+            self.get_logger().info(f"Inliers: {inliers}")
             if inliers > best_inliers:
                 best_inliers = inliers
                 best_diameter = computedDiameter
@@ -106,13 +110,13 @@ class CylinderDetector(Node):
         if best_center is None:
             self.get_logger().info("Failed to compute circle from any set of three points.")
             return
-        self.get_logger().info(f"Generated {len(centers)} center candidates: {centers}")
+        # self.get_logger().info(f"Generated {len(centers)} center candidates: {centers}")
         self.get_logger().info(f"Computed diameter with {best_inliers} inliers: {best_diameter:.2f} mm")
         # テストの時best_inlinersの数を見て、それくらいの数をliners > ?? (line98)に代入
 
         success, computedDiameter, circle_center = self.compute_circle_from_three_points(p1, p2, p3)
         if not success:
-            self.get_logger().info("Failed to compute circle from three points (points may be collinear).")
+            # self.get_logger().info("Failed to compute circle from three points (points may be collinear).")
             return
         self.get_logger().info(f"Computed diameter from three points: {computedDiameter:.2f} mm")
 
